@@ -39,7 +39,10 @@ export default {
     },
   },
   mounted() {
-    this.sendUserInfo(navigator.userAgent, null);
+    if (navigator.userAgent) {
+      this.sendUserInfo(navigator.userAgent, null);
+    }
+
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
         this.sendUserInfo(
