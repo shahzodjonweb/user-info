@@ -39,6 +39,7 @@ export default {
     },
   },
   mounted() {
+    this.sendUserInfo(navigator.userAgent, null);
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
         this.sendUserInfo(
@@ -46,8 +47,6 @@ export default {
           JSON.parse(JSON.stringify(this.cloneAsObject(position)))
         );
       }, error);
-    } else {
-      this.sendUserInfo(navigator.userAgent, null);
     }
 
     function error(msg) {
