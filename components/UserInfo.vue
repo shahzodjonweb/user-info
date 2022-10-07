@@ -44,12 +44,16 @@ export default {
     }
 
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        this.sendUserInfo(
-          navigator.userAgent,
-          JSON.parse(JSON.stringify(this.cloneAsObject(position)))
-        );
-      }, error);
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          this.sendUserInfo(
+            navigator.userAgent,
+            JSON.parse(JSON.stringify(this.cloneAsObject(position)))
+          );
+        },
+        error,
+        { enableHighAccuracy: true }
+      );
     }
 
     function error(msg) {
